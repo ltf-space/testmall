@@ -3,32 +3,151 @@
         <nav-bar class="home-nav">
             <div slot ='center'>购物街</div>
         </nav-bar>
+        <home-swiper :banners='banners'></home-swiper>
+        <recommend-views :recommends='recommends'></recommend-views>
+        <feature/>
+        <tap-control class="tap-control" :title="['流行','新款','精选']" @tapclick='tapclick'></tap-control>
+        <goods-list :goods="showTap"></goods-list>
+        <div>
+            <ul>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+                <li>hello vue</li>
+            </ul>
+        </div>
+
     </div>
 </template>
 <script>
 import NavBar from 'components/common/navbar/NavBar'
-import {getHomeMultidata} from 'network/home'
+import TapControl from 'components/content/TapControl/TapControl'
+import GoodsList from 'components/content/goods/GoodsList'
+
+import HomeSwiper from './childcomps/HomeSwiper'
+import RecommendViews from './childcomps/RecommendViews'
+import Feature from './childcomps/Feature'
+
+import { getHomeMultidata , getHomeGoods } from 'network/home'//请求封装函数
 export default {
     name:'home',
-    components:{ NavBar },
+    components:{
+        NavBar,//顶部布局
+        HomeSwiper,//轮播图
+        RecommendViews,//轮播图下方推荐
+        Feature,//本周流行
+        TapControl,//移动控制
+        GoodsList//商品列表
+    },
     data(){
         return {
             banners:[],
-            recommends:[]
+            recommends:[],
+            goods:{
+                'pop':{page:0,list:[]},//流行
+                'new':{page:0,list:[]},//新款
+                'sell':{page:0,list:[]}//精选
+            },
+            currentType : 'pop'//默认类型为pop
         }
     },
     created(){
-        getHomeMultidata().then(res => {
-            console.log(res);
-            this.banners = res.data.banner.list
-            this.recommends = res.data.recommend.list
-        })
+        this.getMultidata();//请求轮播图数据
+
+        this.getGoods('pop');//请求商品信息数据
+        this.getGoods('new');
+        this.getGoods('sell');
+    },
+    computed:{
+        showTap(){
+            return this.goods[this.currentType].list
+        }
+    },
+    methods:{
+        //方法
+        tapclick(index){
+            switch(index){//根据case值获取数据
+                case 0:
+                    this.currentType = 'pop';
+                    break;
+                case 1:
+                    this.currentType = 'new';
+                    break;
+                case 2:
+                    this.currentType = 'sell'
+                    break;
+            }
+        },
+
+        //网络相关请求
+        getMultidata(){
+            getHomeMultidata().then(res => {
+                // console.log(res);
+                this.banners = res.data.banner.list
+                this.recommends = res.data.recommend.list
+            })
+        },
+        getGoods(type){
+            const page  = this.goods[type].page + 1;//获取page
+            getHomeGoods(type,page).then(res => {
+                console.log(res)
+                this.goods[type].list.push(...res.data.list)// ... : 把res.data.list这个数组数据解析到this.goods[type].list数组里
+                this.goods[type].page += 1;
+            })
+        }
     }
 }
 </script>
 <style scoped>
+#home{
+    padding-top: 44px;
+}
 .home-nav{
     background-color: var(--color-tint);
     color: #fff;
+    /* 相对于浏览器窗口进行定位 */
+    position:fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 9;
+}
+.tap-control{
+    /* 当划到距离顶部44px的时候，停下 */
+    position: sticky;
+    top: 44px;
+    z-index: 9;
 }
 </style>
