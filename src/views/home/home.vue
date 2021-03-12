@@ -3,51 +3,16 @@
         <nav-bar class="home-nav">
             <div slot ='center'>购物街</div>
         </nav-bar>
-        <home-swiper :banners='banners'></home-swiper>
-        <recommend-views :recommends='recommends'></recommend-views>
-        <feature/>
-        <tap-control class="tap-control" :title="['流行','新款','精选']" @tapclick='tapclick'></tap-control>
-        <goods-list :goods="showTap"></goods-list>
-        <div>
-            <ul>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-                <li>hello vue</li>
-            </ul>
-        </div>
+
+        <b-scroll class="content" ref="backclick" :probe-type='3' @back='click' :pullUpLoad='true' @pullingUp='loadMore'>
+          <home-swiper :banners='banners'></home-swiper>
+          <recommend-views :recommends='recommends'></recommend-views>
+          <feature/>
+          <tap-control class="tap-control" :title="['流行','新款','精选']" @tapclick='tapclick'></tap-control>
+          <goods-list :goods="showTap"></goods-list>
+        </b-scroll>
+
+        <back-top @click.native="backtop" v-show="isShowbackTop"></back-top>
 
     </div>
 </template>
@@ -55,6 +20,8 @@
 import NavBar from 'components/common/navbar/NavBar'
 import TapControl from 'components/content/TapControl/TapControl'
 import GoodsList from 'components/content/goods/GoodsList'
+import BScroll from 'components/common/bscroll/BScroll'
+import BackTop from 'components/content/BackTop/BackTop'
 
 import HomeSwiper from './childcomps/HomeSwiper'
 import RecommendViews from './childcomps/RecommendViews'
@@ -69,7 +36,9 @@ export default {
         RecommendViews,//轮播图下方推荐
         Feature,//本周流行
         TapControl,//移动控制
-        GoodsList//商品列表
+        GoodsList,//商品列表
+        BScroll, //移动滚动条
+        BackTop//回到顶部箭头
     },
     data(){
         return {
@@ -80,7 +49,8 @@ export default {
                 'new':{page:0,list:[]},//新款
                 'sell':{page:0,list:[]}//精选
             },
-            currentType : 'pop'//默认类型为pop
+            currentType : 'pop',//默认类型为pop
+            isShowbackTop : false//默认值为false,不显示返回顶部图标
         }
     },
     created(){
@@ -110,6 +80,17 @@ export default {
                     break;
             }
         },
+        backtop(){//回到顶部
+          console.log('backtop')
+          this.$refs.backclick.BScroll.scrollTo(0,0,500)//前两个是坐标，第三个时间500ms
+        },
+        click(position){//接受传出的事件
+          this.isShowbackTop = (-position.y) > 1000
+        },
+        loadMore(){//请求加载更多数据
+          this.getGoods(this.currentType);
+          this.$refs.backclick.BScroll.finishPullUp();
+        },
 
         //网络相关请求
         getMultidata(){
@@ -133,6 +114,8 @@ export default {
 <style scoped>
 #home{
     padding-top: 44px;
+    position: relative;
+    height: 100vh;
 }
 .home-nav{
     background-color: var(--color-tint);
@@ -143,6 +126,14 @@ export default {
     right: 0;
     top: 0;
     z-index: 9;
+}
+.content{
+  overflow: hidden;
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
+  left: 0;
+  right: 0;
 }
 .tap-control{
     /* 当划到距离顶部44px的时候，停下 */
