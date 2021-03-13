@@ -1,6 +1,6 @@
 <template>
     <div class="goods-item">
-        <img :src="goodsItem.show.img" alt="">
+        <img :src="goodsItem.show.img" alt="" @load="itemImageLoad">
         <div class="goods-info">
             <p>{{goodsItem.title}}</p>
             <span class="price">{{goodsItem.price}}</span>
@@ -18,6 +18,12 @@ export default {
                 return {}
             }
         }
+    },
+    methods:{
+      itemImageLoad(){//监听图片加载完成
+        //向外(home.vue)发出事件总线
+        this.$bus.$emit('itemImageLoad')
+      }
     }
 }
 </script>

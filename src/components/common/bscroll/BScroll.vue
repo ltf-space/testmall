@@ -35,21 +35,25 @@ export default {
     this.BScroll = new BScroll(this.$refs.wrapper,{
       probeType:this.probeType,
       click:true,//能够点击图片
-      mouseWheel:true,//鼠标滚轮能够滚动
-      observeDOM:true,//鼠标按键能够滚动
+      // mouseWheel:true,//鼠标滚轮能够滚动
+      // observeDOM:true,//鼠标按键能够滚动
       pullUpLoad:this.pullUpLoad
     })
     //监听滚动位置
     this.BScroll.on('scroll',position => {
-      // console.log(position);
       this.$emit('back',position);//传出back事件，position为参数
     })
     //监听上拉加载
     this.BScroll.on('pullingUp',() => {
-      // console.log('加载更多');
       this.$emit('pullingUp');
     })
-    this.BScroll.scrollTo(0,0)//返回顶部
+    this.BScroll && this.BScroll.scrollTo(0,0)//返回顶部
+  },
+  methods:{
+    refresh(){
+      //没加载图片一次就来一次刷新
+      this.BScroll.refresh()
+    }
   }
 }
 </script>
