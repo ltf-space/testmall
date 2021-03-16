@@ -47,11 +47,13 @@ export default {
     this.BScroll.on('pullingUp',() => {
       this.$emit('pullingUp');
     })
-    this.BScroll && this.BScroll.scrollTo(0,0)//返回顶部
   },
   methods:{
+    bscroll(x,y,ms){
+      this.BScroll && this.BScroll.scrollTo(x,y,ms)//返回顶部
+    },
     refresh(){
-      //没加载图片一次就来一次刷新
+      //每加载图片一次就来一次刷新
       this.BScroll.refresh()
     }
   }

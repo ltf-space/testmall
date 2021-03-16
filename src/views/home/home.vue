@@ -68,8 +68,8 @@ export default {
       console.log('1234');
     },
     activated(){//活跃时调用
-      this.$refs.backclick.BScroll.scrollTo(0,this.saveY)//活跃时，立刻回到离开时所在位置
-      this.$refs.backclick.BScroll.refresh()
+      this.$refs.backclick.bscroll(0,this.saveY)//活跃时，立刻回到离开时所在位置
+      this.$refs.backclick.refresh()
     },
     deactivated(){//不活跃时调用
       this.saveY = this.$refs.backclick.BScroll.y//获取离开时滑动区域位置
@@ -106,7 +106,7 @@ export default {
         },
         backtop(){//回到顶部
           // console.log('backtop')
-          this.$refs.backclick.BScroll.scrollTo(0,0,500)//前两个是坐标，第三个时间500ms
+          this.$refs.backclick.bscroll(0,0,500)//前两个是坐标，第三个时间500ms
         },
         click(position){//接受传出的事件
         //判断backTop是否显示

@@ -1,6 +1,6 @@
 <template>
-    <div class="goods-item">
-        <img :src="goodsItem.show.img" alt="" @load="itemImageLoad">
+    <div class="goods-item" @click="itemclick">
+        <img :src="showImage" alt="" @load="itemImageLoad">
         <div class="goods-info">
             <p>{{goodsItem.title}}</p>
             <span class="price">{{goodsItem.price}}</span>
@@ -19,10 +19,18 @@ export default {
             }
         }
     },
+    computed:{
+      showImage(){
+        return this.goodsItem.image || this.goodsItem.show.img
+      }
+    },
     methods:{
       itemImageLoad(){//监听图片加载完成
         //向外(home.vue)发出事件总线
-        this.$bus.$emit('itemImageLoad')
+          this.$bus.$emit('itemImageLoad')
+      },
+      itemclick(){//点击商品跳转详情页
+        this.$router.push('/detail/'+this.goodsItem.iid)
       }
     }
 }
