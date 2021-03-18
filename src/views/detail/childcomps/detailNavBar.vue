@@ -1,14 +1,14 @@
 <template>
   <div>
     <nav-bar>
-      <div slot="left" class="back" @click="backclick">
+      <div slot="left" class="back" @click="backClick">
         <img src="~assets/images/common/back.svg" alt="">
       </div>
       <div slot="center" class="titles">
         <div v-for="(item,index) in titles" 
           :key="index" class="titles-item" 
           :class="{avtive:currentIndex === index}" 
-          @click="titleclick(index)">
+          @click="titleClick(index)">
           {{item}}
         </div>
       </div>
@@ -30,10 +30,11 @@ export default {
     NavBar
   },
   methods:{
-    titleclick(index){
+    titleClick(index){
       this.currentIndex = index;
+      this.$emit('titleClick',index)
     },
-    backclick(){//监听返回
+    backClick(){//监听返回
       this.$router.back()//返回上一步 go(-1)相等于back()
     }
   }

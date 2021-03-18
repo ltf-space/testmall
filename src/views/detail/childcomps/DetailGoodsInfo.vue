@@ -32,9 +32,9 @@
     },
     methods:{
       imgLoad(){
-        if(++this.counter === this.imagesLength){//如果counter等于图片的长度，说明图片已经加载完成
+        // if(++this.counter === this.imagesLength){//如果counter等于图片的长度，说明图片已经加载完成
           this.$emit('imageLoad')
-        }
+        // }
       }
     },
     watch:{//检测某个属性变化，属性变化时调用

@@ -49,12 +49,14 @@ export default {
     })
   },
   methods:{
-    bscroll(x,y,ms){
-      this.BScroll && this.BScroll.scrollTo(x,y,ms)//返回顶部
+    bscroll(x,y,time){
+      // this.BScroll && this.BScroll.scrollTo(x,y,ms)//返回顶部 
+		    this.BScroll && this.BScroll.scrollTo && this.BScroll.scrollTo(x, y, time)
     },
     refresh(){
       //每加载图片一次就来一次刷新
-      this.BScroll.refresh()
+      // this.BScroll.refresh()
+        this.BScroll && this.BScroll.refresh && this.BScroll.refresh()
     }
   }
 }

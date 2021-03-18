@@ -1,14 +1,14 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav"></detail-nav-bar>
+    <detail-nav-bar class="detail-nav" @titleClick='titleClick'></detail-nav-bar>
     <b-scroll class="detail-content" :pullUpLoad='true' ref="bscroll">
       <detail-swiper :top-images='topDetail'></detail-swiper>
       <detail-base-info :goods='Goods'></detail-base-info>
       <detail-shop-info :shop='Shop'></detail-shop-info>
       <detail-goods-info :detail-info='detailInfo' @imageLoad='imageLoad'></detail-goods-info>
-      <detail-param-info :param-info='paramsInfo'></detail-param-info>
-      <detail-comment-info :comment-info='commentInfo'></detail-comment-info>
-      <goods-list :goods='recommend'></goods-list>
+      <detail-param-info :param-info='paramsInfo' ref="params"></detail-param-info>
+      <detail-comment-info :comment-info='commentInfo' ref="comment"></detail-comment-info>
+      <goods-list :goods='recommend' ref="recommend"></goods-list>
     </b-scroll>
   </div>
 </template>
@@ -24,6 +24,7 @@ import DetailGoodsInfo from './childcomps/DetailGoodsInfo'
 import DetailParamInfo from './childcomps/DetailParamInfo'
 import DetailCommentInfo from './childcomps/DetailCommentInfo'
 import GoodsList from 'components/content/goods/GoodsList'
+import { debounce } from 'components/common/utils/utils'
 export default {
   name:'Detail',
   data(){
@@ -35,7 +36,9 @@ export default {
       detailInfo:{},
       paramsInfo:{},
       commentInfo:{},
-      recommend:[]
+      recommend:[],
+      themeTopYs:[0,1000,2000,2800],//详情页导航控制栏各部分内容对应的高度
+      getthemeTopYs:null
     }
   },
   components:{
@@ -79,7 +82,20 @@ export default {
   },
   methods:{
     imageLoad(){//图片加载完成后刷新
-      this.$refs.bscroll.BScroll.refresh()
+      this.$refs.bscroll.refresh()
+      this.getthemeTopYs = debounce(() => {//防抖，没生效
+        this.themeTopYs = []
+        this.themeTopYs.push(0)
+        this.themeTopYs.push(this.$refs.params.$el.offsetTop)
+        this.themeTopYs.push(this.$refs.comment.$el.offsetTop)
+        this.themeTopYs.push(this.$refs.recommend.$el.offsetTop)
+        console.log(this.themeTopYs)
+      },500)
+      this.getthemeTopYs()
+      
+    },
+    titleClick(index){
+      this.$refs.bscroll.bscroll(0,-this.themeTopYs[index],200) 
     }
   }
 }

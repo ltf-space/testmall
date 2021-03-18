@@ -76,11 +76,11 @@ export default {
     },
     mounted(){
        //监听图片加载
-       const refresh = debounce(this.$refs.backclick.refresh,200)
-        this.$bus.$on('itemImageLoad',() => {//接受(BScroll.vue)发出的事件
-          // this.$refs.backclick.BScroll.refresh()//每当加载一张图片就执行一次刷新，refresh() 刷新
-          refresh();
-        })
+      const refresh = debounce(this.$refs.backclick.refresh,200)
+      this.$bus.$on('itemImageLoad',() => {//接受(BScroll.vue)发出的事件
+        // this.$refs.backclick.BScroll.refresh()//每当加载一张图片就执行一次刷新，refresh() 刷新
+        refresh();
+      })
     },
     computed:{
         showTap(){
@@ -101,8 +101,9 @@ export default {
                     this.currentType = 'sell'
                     break;
             }
+            //让每一个控制导航下标保持一致
             this.$refs.tapControl1.currentIndex = index
-            this.$refs.tapControl2.currentIndex = index
+            this.$refs.tapControl2.currentIndex = index 
         },
         backtop(){//回到顶部
           // console.log('backtop')
