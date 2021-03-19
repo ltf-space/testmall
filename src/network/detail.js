@@ -16,7 +16,7 @@ export function getRecommend(){
 
 export class Goods {//轮播图下方数据
   constructor(itemInfo,columns,services){
-    this.titles = itemInfo.titles
+    this.titles = itemInfo.title
     this.desc = itemInfo.desc
     this.newPrice = itemInfo.price
     this.oldPrice = itemInfo.oldprice
