@@ -2,11 +2,6 @@
   <div id="detail">
     <detail-nav-bar class="detail-nav" @titleClick='titleClick' ref="navBar"></detail-nav-bar> 
     <b-scroll class="detail-content" :pullUpLoad='true' ref="bscroll" @back='contentBScroll'>
-      <ul>
-        <li v-for="(item,index) in $store.state.addList" :key="index">
-          {{item}}
-        </li>
-      </ul>
       <detail-swiper :top-images='topDetail'></detail-swiper>
       <detail-base-info :goods='Goods'></detail-base-info>
       <detail-shop-info :shop='Shop'></detail-shop-info>
@@ -153,8 +148,16 @@ export default {
       product.iid = this.iid
 
       //将商品加到购物车
-      // this.$store.dispatch('addCart',product)//发出addCart事件
-      this.$store.commit('addCart',product)//发出addCart事件,在store的mutations中接收
+        //发出addCart事件,在store的actions中接收
+      this.$store.dispatch('addCart',product).then(res => {
+        console.log(res)
+      })
+
+      //发出addCart事件,在store的mutations中接收
+      // this.$store.commit('addCart',product).then(res => {
+      //   console.log(res)
+      // })
+      
     }
   }
 }
