@@ -54,14 +54,14 @@ const store = new Vuex.Store({
           // context.commit('addCounter',oldProduct)//将方法提交到mutations中，在mutations中执行
           
           oldProduct.count += 1;
-          resolve('商品加一');
+          resolve('加购成功');
         }else{
           payLoad.count = 1;
           // context.commit('addCart',payLoad)
           
           payLoad.checked = true;
           context.state.addList.push(payLoad)     
-          resolve('添加新商品');
+          resolve('已成功添加新商品');
         }
       })
       

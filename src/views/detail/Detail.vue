@@ -150,7 +150,7 @@ export default {
       //将商品加到购物车
         //发出addCart事件,在store的actions中接收
       this.$store.dispatch('addCart',product).then(res => {
-        console.log(res)
+        this.$toast.show(res,2000)
       })
 
       //发出addCart事件,在store的mutations中接收

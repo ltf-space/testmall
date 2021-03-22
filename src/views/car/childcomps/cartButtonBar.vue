@@ -5,7 +5,7 @@
       <span>全选</span>
     </div>
     <div class="price">合计:{{totalPrice}}</div>
-    <div class="calculate">去计算:({{checkcount}})</div>
+    <div class="calculate" @click="calcCheck">去计算:({{checkcount}})</div>
   </div>
 </template>
 
@@ -48,7 +48,11 @@ export default {
       }else{
         this.$store.state.addList.forEach(item => item.checked = true);
       }
-    }
+    },
+    calcCheck(){
+      if(!this.isSelectAll){
+        this.$toast.show('请选择商品',2000)}
+      }
   }
 }
 </script>
